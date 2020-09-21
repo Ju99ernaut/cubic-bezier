@@ -45,16 +45,14 @@
 		},
 
 		add: function (name, bezier) {
-			var canvas = document.createElement('canvas').prop({
-					width: 30,
-					height: 30
-				}),
-				a = document.createElement('a').prop({
-					//href: '#' + bezier.coordinates,
-					title: name,
-					bezier: bezier,
-					bezierCanvas: new BezierCanvas(canvas, bezier, .15)
-				});
+			const canvas = document.createElement('canvas')
+			canvas.width = 30;
+			canvas.height = 30;
+			const a = document.createElement('a')
+			//href: '#' + bezier.coordinates,
+			a.title = name;
+			a.bezier = bezier;
+			a.bezierCanvas = new BezierCanvas(canvas, bezier, .15);
 
 			if (!bezier.applyStyle) console.log(bezier);
 			bezier.applyStyle(a);
@@ -63,27 +61,27 @@
 
 			a.appendChild(canvas)
 
-			a.appendChild(document.createElement('span').prop({
-				textContent: name,
-				title: name
-			}));
+			const span = document.createElement('span');
+			span.textContent = name;
+			span.title = name;
+			a.appendChild(span);
 
-			a.appendChild(document.createElement('button').prop({
-				innerHTML: '×',
-				title: 'Remove from library',
-				classList: 'button',
-				onclick: function (evt) {
-					evt.stopPropagation();
+			const button = document.createElement('button');
+			button.innerHTML = '×';
+			button.title = 'Remove from library';
+			button.classList = 'button';
+			button.onclick = function (e) {
+				e.stopPropagation();
 
-					//?Remove prompt
-					//if (confirm('Are you sure you want to delete this? There is no going back!')) {
-					//	self.deleteItem(this.parentNode);
-					//}
-					self.deleteItem(this.parentNode);
+				//?Remove prompt
+				//if (confirm('Are you sure you want to delete this? There is no going back!')) {
+				//	self.deleteItem(this.parentNode);
+				//}
+				self.deleteItem(this.parentNode);
 
-					return false;
-				}
-			}));
+				return false;
+			};
+			a.appendChild(button);
 
 			a.bezierCanvas.plot(self.thumbnailStyle);
 
@@ -96,7 +94,7 @@
 
 		selectThumbnail: function () {
 			//?currently sets preview but should set curve coordinates and update input
-			var selected = $('.selected', this.parentNode);
+			const selected = $('.selected', this.parentNode);
 
 			if (selected) {
 				selected.classList.remove('selected');
@@ -124,9 +122,11 @@
 			*/
 			//?Remove above
 			bezierCanvas.bezier = this.bezier;
-			var offsets = bezierCanvas.offsets;
-			P1.style.prop(offsets[0]);
-			P2.style.prop(offsets[1]);
+			const offsets = bezierCanvas.offsets;
+			P1.style.left = offsets[0]['left'];
+			P1.style.top = offsets[0]['top'];
+			P2.style.left = offsets[1]['left'];
+			P2.style.top = offsets[1]['top'];
 
 			bezierCanvas.plot({
 				handleColor: 'rgba(0,255,0,.6)',
@@ -143,7 +143,7 @@
 		},
 
 		deleteItem: function (a) {
-			var name = $('span', a).textContent;
+			const name = $('span', a).textContent;
 
 			delete bezierLibrary.curves[name];
 
@@ -193,7 +193,7 @@
 	window[id] = $('#' + id);
 });
 
-var ctx = curve.getContext("2d"),
+const ctx = curve.getContext("2d"),
 	bezierCode = $('h1 code'),
 	curveBoundingBox = curve.getBoundingClientRect(),
 	bezierCanvas = new BezierCanvas(curve, null, [.25, 0]),
@@ -223,8 +223,10 @@ bezierLibrary.render();
 //}
 bezierCanvas.bezier = window.bezier = new CubicBezier(".25, .1, .25, 1"); //?Change to input
 var offsets = bezierCanvas.offsets;
-P1.style.prop(offsets[0]);
-P2.style.prop(offsets[1]);
+P1.style.left = offsets[0]['left'];
+P1.style.top = offsets[0]['top'];
+P2.style.left = offsets[1]['left'];
+P2.style.top = offsets[1]['top'];
 
 //favicon.width = favicon.height = 16 * pixelDepth;
 
@@ -237,12 +239,12 @@ update();
 // Make the handles draggable
 P1.onmousedown =
 	P2.onmousedown = function () {
-		var me = this;
+		const me = this;
 
 		document.onmousemove = function drag(e) {
-			var x = e.pageX,
-				y = e.pageY,
-				left = curveBoundingBox.left,
+			let x = e.pageX,
+				y = e.pageY;
+			const left = curveBoundingBox.left,
 				top = curveBoundingBox.top;
 
 			if (x === 0 && y == 0) {
@@ -256,10 +258,8 @@ P1.onmousedown =
 			//y = y > top + (curveBoundingBox.width * 2) ? top + (curveBoundingBox.width * 2) : y;
 			//y = y < top ? y = top : y;
 
-			me.style.prop({
-				left: x - left + 'px',
-				top: y - top + 'px'
-			});
+			me.style.left = x - left + 'px';
+			me.style.top = y - top + 'px';
 
 			update();
 		};
@@ -273,15 +273,15 @@ P1.onmousedown =
 
 P1.onkeydown =
 	P2.onkeydown = function (evt) {
-		var code = evt.keyCode;
+		const code = evt.keyCode;
 
 		if (code >= 37 && code <= 40) {
 			evt.preventDefault();
 
 			// Arrow keys pressed
-			var left = parseInt(this.style.left),
-				top = parseInt(this.style.top)
-			offset = 3 * (evt.shiftKey ? 10 : 1);
+			const left = parseInt(this.style.left),
+				top = parseInt(this.style.top),
+				offset = 3 * (evt.shiftKey ? 10 : 1);
 
 			switch (code) {
 				case 37:
@@ -311,19 +311,18 @@ P1.onkeydown =
 //	P2.onmouseup = updateDelayed;
 
 curve.onclick = function (evt) {
-	var left = curveBoundingBox.left,
+	const left = curveBoundingBox.left,
 		top = curveBoundingBox.top,
 		x = evt.pageX - left,
 		y = evt.pageY - top;
 
 	// Find which point is closer
-	var distP1 = distance(x, y, parseInt(P1.style.left), parseInt(P1.style.top)),
-		distP2 = distance(x, y, parseInt(P2.style.left), parseInt(P2.style.top));
+	const distP1 = distance(x, y, parseInt(P1.style.left), parseInt(P1.style.top)),
+		distP2 = distance(x, y, parseInt(P2.style.left), parseInt(P2.style.top)),
+		pt = (distP1 < distP2 ? P1 : P2);
 
-	(distP1 < distP2 ? P1 : P2).style.prop({
-		left: x + 'px',
-		top: y + 'px'
-	});
+	pt.style.left = x + 'px';
+	pt.style.top = y + 'px';
 
 	update();
 	//updateDelayed();
@@ -334,7 +333,7 @@ curve.onclick = function (evt) {
 };
 
 curve.onmousemove = function (evt) {
-	var left = curveBoundingBox.left,
+	const left = curveBoundingBox.left,
 		top = curveBoundingBox.top,
 		height = curveBoundingBox.height,
 		x = evt.pageX - left,
@@ -374,7 +373,7 @@ curve.onmousemove = function (evt) {
 //?Remove above
 
 save.onclick = function () {
-	var rawValues = bezier.coordinates + '';
+	const rawValues = bezier.coordinates + '';
 	bezierLibrary.add(rawValues, bezier);
 	bezierLibrary.curves[rawValues] = rawValues;
 	bezierLibrary.save();
@@ -512,7 +511,7 @@ function update() {
 function updateDelayed() {
 	//bezier.applyStyle(current);
 
-	var hash = '#' + bezier.coordinates,
+	const hash = '#' + bezier.coordinates,
 		size = 16 * pixelDepth;
 
 	//bezierCode.parentNode.href = hash;

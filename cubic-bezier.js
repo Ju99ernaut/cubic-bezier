@@ -23,7 +23,7 @@
 
 (function () {
 
-	var self = window.CubicBezier = function (coordinates) {
+	const self = window.CubicBezier = function (coordinates) {
 		if (typeof coordinates === 'string') {
 			if (coordinates.indexOf('#') === 0) {
 				coordinates = coordinates.slice(1);
@@ -42,8 +42,8 @@
 			return +n;
 		});
 
-		for (var i = 4; i--;) {
-			var xy = this.coordinates[i];
+		for (let i = 4; i--;) {
+			let xy = this.coordinates[i];
 			if (isNaN(xy) || (!(i % 2) && (xy < 0 || xy > 1))) {
 				throw 'Wrong coordinate at ' + i + '(' + xy + ')';
 			}
@@ -53,6 +53,18 @@
 			return this.map(self.prettifyNumber) + '';
 		}
 	};
+
+	self.predefined = {
+		'ease': '.25,.1,.25,1',
+		'linear': '0,0,1,1',
+		'ease-in': '.42,0,1,1',
+		'ease-out': '0,0,.58,1',
+		'ease-in-out': '.42,0,.58,1'
+	}
+
+	self.prettifyNumber = function (val) {
+		return (Math.round(val * 100) / 100 + '').replace(/^0\./, '.');
+	}
 
 	self.prototype = {
 		get P1() {
@@ -65,9 +77,9 @@
 
 		// Clipped to the range 0-1
 		get clipped() {
-			var coordinates = this.coordinates.slice();
+			let coordinates = this.coordinates.slice();
 
-			for (var i = coordinates.length; i--;) {
+			for (let i = coordinates.length; i--;) {
 				coordinates[i] = Math.max(0, Math.min(coordinates[i], 1));
 			}
 
@@ -75,7 +87,7 @@
 		},
 
 		get inRange() {
-			var coordinates = this.coordinates;
+			let coordinates = this.coordinates;
 
 			return Math.abs(coordinates[1] - .5) <= .5 && Math.abs(coordinates[3] - .5) <= .5;
 		},
@@ -89,31 +101,31 @@
 		},
 	};
 
-	Chainvas.extend(self, {
-		prettifyNumber: function (val) {
-			return (Math.round(val * 100) / 100 + '').replace(/^0\./, '.');
-		},
-
-		predefined: {
-			'ease': '.25,.1,.25,1',
-			'linear': '0,0,1,1',
-			'ease-in': '.42,0,1,1',
-			'ease-out': '0,0,.58,1',
-			'ease-in-out': '.42,0,.58,1'
-		}
-	});
+	//Chainvas.extend(self, {
+	//	prettifyNumber: function (val) {
+	//		return (Math.round(val * 100) / 100 + '').replace(/^0\./, '.');
+	//	},
+	//
+	//	predefined: {
+	//		'ease': '.25,.1,.25,1',
+	//		'linear': '0,0,1,1',
+	//		'ease-in': '.42,0,1,1',
+	//		'ease-out': '0,0,.58,1',
+	//		'ease-in-out': '.42,0,.58,1'
+	//	}
+	//});
 
 })();
 
 (function () {
 
-	var self = window.BezierCanvas = function (canvas, bezier, padding) {
+	const self = window.BezierCanvas = function (canvas, bezier, padding) {
 		this.canvas = canvas;
 		this.bezier = bezier;
 		this.padding = self.getPadding(padding);
 
 		// Convert to a cartesian coordinate system with axes from 0 to 1
-		var ctx = this.canvas.getContext('2d'),
+		const ctx = this.canvas.getContext('2d'),
 			p = this.padding;
 
 		ctx.scale(canvas.width * (1 - p[1] - p[3]), -canvas.height * (1 - p[0] - p[2]));
@@ -122,7 +134,7 @@
 
 	self.prototype = {
 		get offsets() {
-			var p = this.padding,
+			const p = this.padding,
 				w = this.canvas.width,
 				h = this.canvas.height;
 
@@ -136,8 +148,8 @@
 		},
 
 		offsetsToCoordinates: function (element) {
-			var p = this.padding,
-				w = this.canvas.width,
+			let p = this.padding;
+			const w = this.canvas.width,
 				h = this.canvas.height;
 
 			// Convert padding percentage to actual padding
@@ -152,10 +164,10 @@
 		},
 
 		plot: function (settings) {
-			var xy = this.bezier.coordinates,
+			const xy = this.bezier.coordinates,
 				ctx = this.canvas.getContext('2d');
 
-			var defaultSettings = {
+			const defaultSettings = {
 				handleColor: 'rgba(0,0,0,.6)',
 				handleThickness: .008,
 				bezierColor: 'black',
@@ -164,41 +176,50 @@
 
 			settings || (settings = {});
 
-			for (var setting in defaultSettings) {
+			for (let setting in defaultSettings) {
 				(setting in settings) || (settings[setting] = defaultSettings[setting]);
 			}
 
 			ctx.clearRect(-.5, -.5, 2, 2);
 
 			// Draw control handles
-			ctx.beginPath().prop({
-				fillStyle: settings.handleColor,
-				lineWidth: settings.handleThickness,
-				strokeStyle: settings.handleColor
-			});
+			ctx.beginPath();
+			ctx.fillStyle = settings.handleColor;
+			ctx.lineWidth = settings.handleThickness;
+			ctx.strokeStyle = settings.handleColor;
 
-			ctx.moveTo(0, 0).lineTo(xy[0], xy[1]);
-			ctx.moveTo(1, 1).lineTo(xy[2], xy[3]);
+			ctx.moveTo(0, 0);
+			ctx.lineTo(xy[0], xy[1]);
+			ctx.moveTo(1, 1);
+			ctx.lineTo(xy[2], xy[3]);
 
-			ctx.stroke().closePath();
+			ctx.stroke();
+			ctx.closePath();
 
-			ctx.circle(xy[0], xy[1], 1.5 * settings.handleThickness).fill()
-				.circle(xy[2], xy[3], 1.5 * settings.handleThickness).fill();
+			const r = 1.5 * settings.handleThickness;
+			ctx.beginPath();
+			ctx.arc(xy[0], xy[1], r, 0, 2 * Math.PI, false);
+			ctx.closePath();
+			ctx.fill();
+			ctx.beginPath();
+			ctx.arc(xy[2], xy[3], r, 0, 2 * Math.PI, false);
+			ctx.closePath();
+			ctx.fill();
 
 			// Draw bezier curve
-			ctx.beginPath()
-				.prop({
-					lineWidth: settings.bezierThickness,
-					strokeStyle: settings.bezierColor
-				}).moveTo(0, 0)
-				.bezierCurveTo(xy[0], xy[1], xy[2], xy[3], 1, 1).stroke()
-				.closePath();
+			ctx.beginPath();
+			ctx.lineWidth = settings.bezierThickness;
+			ctx.strokeStyle = settings.bezierColor;
+			ctx.moveTo(0, 0);
+			ctx.bezierCurveTo(xy[0], xy[1], xy[2], xy[3], 1, 1);
+			ctx.stroke();
+			ctx.closePath();
 		}
 
 	};
 
 	self.getPadding = function (padding) {
-		var p = typeof padding === 'number' ? [padding] : padding;
+		let p = typeof padding === 'number' ? [padding] : padding;
 
 		if (p.length === 1) {
 			p[1] = p[0];
