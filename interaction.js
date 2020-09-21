@@ -23,19 +23,19 @@
 
 (function () {
 
-	var self = window.bezierLibrary = {
+	const self = window.bezierLibrary = {
 		curves: {},
 
 		render: function () {
-			var items = $$('a', library);
+			const items = $$('a', library);
 
-			for (var i = items.length; i--;) {
+			for (let i = items.length; i--;) {
 				library.removeChild(items[i]);
 			}
 
-			for (var name in self.curves) {
+			for (let name in self.curves) {
 				try {
-					var bezier = new CubicBezier(self.curves[name]);
+					const bezier = new CubicBezier(self.curves[name]);
 				} catch (e) {
 					continue;
 				}
@@ -222,7 +222,7 @@ bezierLibrary.render();
 //	P2.style.prop(offsets[1]);
 //}
 bezierCanvas.bezier = window.bezier = new CubicBezier(".25, .1, .25, 1"); //?Change to input
-var offsets = bezierCanvas.offsets;
+const offsets = bezierCanvas.offsets;
 P1.style.left = offsets[0]['left'];
 P1.style.top = offsets[0]['top'];
 P2.style.left = offsets[1]['left'];
