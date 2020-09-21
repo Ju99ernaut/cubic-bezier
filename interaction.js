@@ -35,12 +35,10 @@
 
 			for (let name in self.curves) {
 				try {
-					const bezier = new CubicBezier(self.curves[name]);
+					self.add(name, new CubicBezier(self.curves[name]));
 				} catch (e) {
-					continue;
+					console.error(e);
 				}
-
-				self.add(name, bezier);
 			}
 		},
 
