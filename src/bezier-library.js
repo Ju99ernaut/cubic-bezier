@@ -134,7 +134,7 @@ export default (library, bezierCanvas, P1, P2) => {
         deleteItem(a) {
             const name = $('span', a).textContent;
 
-            //delete this.curves[name];
+            delete this.curves[name];
 
             this.save();
 
