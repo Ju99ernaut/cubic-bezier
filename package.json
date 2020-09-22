@@ -1,0 +1,30 @@
+{
+  "name": "cubic-bezier-editor",
+  "version": "1.0.0",
+  "description": "Editor for generating cubic bezier value to use in css animations",
+  "main": "index.js",
+  "scripts": {
+    "start": "parcel index.html",
+    "dev": "parcel index.html",
+    "build": "parcel build index.html",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ju99ernaut/cubic-bezier.git"
+  },
+  "keywords": [
+    "cubic-bezier",
+    "easing",
+    "editor"
+  ],
+  "author": "Brendon Ngirazi",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Ju99ernaut/cubic-bezier/issues"
+  },
+  "homepage": "https://github.com/Ju99ernaut/cubic-bezier#readme",
+  "devDependencies": {
+    "parcel-bundler": "^1.12.4"
+  }
+}
