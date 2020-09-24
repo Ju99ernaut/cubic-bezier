@@ -13,7 +13,7 @@ import {
     BezierCanvas
 } from './cubic-bezier';
 
-export default (library, bezierCanvas, P1, P2) => {
+export default (library, bezierCanvas, P1, P2, opts = {}) => {
     const self = {
         curves: {},
 
@@ -35,12 +35,13 @@ export default (library, bezierCanvas, P1, P2) => {
 
         add(name, bezier) {
             const canvas = document.createElement('canvas')
-            canvas.width = 30;
-            canvas.height = 30;
-            const a = document.createElement('a')
+            canvas.width = opts.width || 30;
+            canvas.height = opts.height || 30;
+            const a = document.createElement('a');
             //href: '#' + bezier.coordinates,
             a.title = name;
             a.bezier = bezier;
+            a.style.width = opts.width ? opts.width + 5 + 'px' : '35px';
             a.bezierCanvas = new BezierCanvas(canvas, bezier, .15);
 
             if (!bezier.applyStyle) console.log(bezier);
@@ -58,7 +59,7 @@ export default (library, bezierCanvas, P1, P2) => {
             const button = document.createElement('button');
             button.innerHTML = '×';
             button.title = 'Remove from library';
-            button.classList = 'button';
+            button.classList = 'curve-button';
             button.addEventListener('click', function (e) {
                 e.stopPropagation();
 
@@ -118,10 +119,10 @@ export default (library, bezierCanvas, P1, P2) => {
             P2.style.top = offsets[1]['top'];
 
             bezierCanvas.plot({
-                handleColor: 'rgba(0,255,0,.6)',
-                bezierColor: '#aaa4aa',
-                handleThickness: .01,
-                bezierThickness: .015
+                handleColor: opts.handleColor || 'rgba(0,255,0,.6)',
+                bezierColor: opts.bezierColor || '#aaa4aa',
+                handleThickness: opts.handleThickness || .01,
+                bezierThickness: opts.bezierThickness || .015
             });
 
             //var params = $$('.param', bezierCode),
