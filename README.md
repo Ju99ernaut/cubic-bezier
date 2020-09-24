@@ -59,8 +59,10 @@ body {
 
 ## Reference
 ```js
-cubicBezier.getValue(bezier);//.42,0,.58,1
-cubicBezier.getCss(bezier);//cubic-bezier(.42,0,.58,1)
+cubicBezier.getValueArrayNum(bezier);//[0.25, 0.1, 0.25, 1]
+cubicBezier.getValueArray(bezier);//[".25", " .1", " .25", " 1"]
+cubicBezier.getValueString(bezier);//'.42,0,.58,1'
+cubicBezier.getCss(bezier);//'cubic-bezier(.42,0,.58,1)'
 ```
 
 ## Download
