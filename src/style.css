@@ -4,10 +4,6 @@
  *
  */
 
-* {
-	margin: 0;
-}
-
 /*#preview>canvas,
 header>p,*/
 .curve-library>a {
@@ -16,12 +12,6 @@ header>p,*/
 	-o-transition: 1s;
 	-webkit-transition: 1s;
 	transition: 1s;
-}
-
-body {
-	background: rgb(46, 42, 42);
-	font-family: 'Hiragino Kaku Gothic Pro', 'Segoe UI', 'Apple Gothic', Tahoma, 'Helvetica Neue', sans-serif;
-	line-height: 1.4;
 }
 
 @keyframes copied {
@@ -34,7 +24,7 @@ body {
 	}
 }
 
-.button {
+.curve-button {
 	padding: .3em .5em;
 	border: 0;
 	font-size: 50%;
@@ -45,11 +35,11 @@ body {
 	border-radius: .3em;
 }
 
-.button:hover {
+.curve-button:hover {
 	background: #f08;
 }
 
-.button:focus {
+.curve-button:focus {
 	box-shadow: 0 0 5px 2px yellow;
 }
 
@@ -109,7 +99,7 @@ body {
 	content: 'Time ('attr(data-time) '%)';
 }
 
-.save {
+.curve-save {
 	position: absolute;
 	bottom: 10px;
 	z-index: 0;
@@ -181,14 +171,12 @@ canvas.curve-canvas {
 section.curve-library {
 	display: flex;
 	flex-direction: column;
-	margin-left: 180px;
 	margin-top: 20px;
 }
 
 .curve-library>a {
 	position: relative;
 	float: left;
-	width: 35px;
 	margin: 0 0 .1em 0;
 	color: #999;
 	font-size: 110%;
