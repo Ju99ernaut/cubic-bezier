@@ -158,7 +158,13 @@ export const cubicBezier = (options = {}) => {
             //	params[i].textContent = prettyOffsets[i];
             //}
         },
-        getValue(bezier) {
+        getValueArrayNum(bezier) {
+            return bezier.coordinates.toString().split(',').map(n => parseFloat(n));
+        },
+        getValueArray(bezier) {
+            return bezier.coordinates.toString().split(',');
+        },
+        getValueString(bezier) {
             return bezier.coordinates.toString();
         },
         getValueCss(bezier) {
