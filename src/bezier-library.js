@@ -150,14 +150,6 @@ export default (library, bezierCanvas, P1, P2, opts = {}) => {
             localStorage.curves = JSON.stringify(curves || this.curves);
         },
 
-        getValue(bezier) {
-            return bezier.coordinates.toString();
-        },
-
-        getValueCss(bezier) {
-            return "cubic-bezier(" + bezier.coordinates.toString() + ")";
-        },
-
         thumbnailStyle: {
             handleColor: 'rgba(0,0,0,.3)',
             handleThickness: .018,

@@ -158,6 +158,12 @@ export const cubicBezier = (options = {}) => {
             //	params[i].textContent = prettyOffsets[i];
             //}
         },
+        getValue(bezier) {
+            return bezier.coordinates.toString();
+        },
+        getValueCss(bezier) {
+            return "cubic-bezier(" + bezier.coordinates.toString() + ")";
+        },
         init() {
             const curveDisplay = document.createElement('div');
             curveDisplay.classList.add('curve-display');
