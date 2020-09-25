@@ -22,7 +22,6 @@ export class CubicBezier {
         this.coordinates = this.coordinates.map(n => {
             return +n;
         });
-        //this.checkCoordinates(this.coordinates);
         this.coordinates.toString = () => {
             return this.coordinates.map(this.prettifyNumber) + '';
         }
@@ -45,15 +44,6 @@ export class CubicBezier {
             return coordinates;
         }
     }
-
-    checkCoordinates(coordinates) {
-        for (let i = 4; i--;) {
-            let xy = coordinates[i];
-            if (isNaN(xy) || (!(i % 2) && (xy < 0 || xy > 1))) {
-                throw 'Wrong coordinate at ' + i + '(' + xy + ')';
-            }
-        }
-    };
 
     prettifyNumber = val => {
         return (Math.round(val * 100) / 100 + '').replace(/^0\./, '.');
