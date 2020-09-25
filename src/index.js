@@ -262,4 +262,4 @@ export const cubicBezier = (options = {}) => {
     return self;
 }
 
-cubicBezier().init();
+window.cubicBezier = cubicBezier;
