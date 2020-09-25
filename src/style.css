@@ -24,6 +24,17 @@ header>p,*/
 	}
 }
 
+.curve-preview-ball {
+	position: absolute;
+	top: 5px;
+	left: 15px;
+	width: 20px;
+	height: 20px;
+	border-radius: 10px;
+	background: #aaa4aa;
+	z-index: 1;
+}
+
 .curve-button {
 	padding: .3em .5em;
 	border: 0;
@@ -45,7 +56,7 @@ header>p,*/
 
 .coordinate-plane {
 	position: absolute;
-	top: 1em;
+	top: 30px;
 	left: 0;
 	line-height: 0;
 	margin-left: 20px;
@@ -99,11 +110,18 @@ header>p,*/
 	content: 'Time ('attr(data-time) '%)';
 }
 
+#curve-input {
+	position: absolute;
+	bottom: -30px;
+	left: 0px;
+	width: 100px;
+}
+
 .curve-save {
 	position: absolute;
-	bottom: 10px;
+	bottom: -30px;
 	z-index: 0;
-	right: .5em;
+	left: 110px;
 	font-size: .8em;
 }
 
@@ -171,7 +189,8 @@ canvas.curve-canvas {
 section.curve-library {
 	display: flex;
 	flex-direction: column;
-	margin-top: 20px;
+	margin-top: 30px;
+	overflow-y: auto;
 }
 
 .curve-library>a {

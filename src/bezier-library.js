@@ -62,11 +62,7 @@ export default (library, bezierCanvas, P1, P2, opts = {}) => {
             button.classList = 'curve-button';
             button.addEventListener('click', function (e) {
                 e.stopPropagation();
-
                 //?Remove prompt
-                //if (confirm('Are you sure you want to delete this? There is no going back!')) {
-                //	self.deleteItem(this.parentNode);
-                //}
                 self.deleteItem(this.parentNode);
 
                 return false;
@@ -92,44 +88,13 @@ export default (library, bezierCanvas, P1, P2, opts = {}) => {
             }
 
             this.classList.add('selected');
-
-            //?Remove below
-            /*
-            this.bezierCanvas.plot(self.thumbnailStyleSelected);
-
-            compare.style.cssText = this.style.cssText;
-
-            compare.style.setProperty(prefix + 'transition-duration', getDuration() + 's', null);
-
-            compareCanvas.bezier = this.bezier;
-
-            compareCanvas.plot({
-            handleColor: 'rgba(255,255,255,.5)',
-            bezierColor: 'white',
-            handleThickness: .03,
-            bezierThickness: .06
-            });
-            */
-            //?Remove above
             bezierCanvas.bezier = this.bezier;
             const offsets = bezierCanvas.offsets;
             P1.style.left = offsets[0]['left'];
             P1.style.top = offsets[0]['top'];
             P2.style.left = offsets[1]['left'];
             P2.style.top = offsets[1]['top'];
-
-            bezierCanvas.plot({
-                handleColor: opts.handleColor || 'rgba(0,255,0,.6)',
-                bezierColor: opts.bezierColor || '#aaa4aa',
-                handleThickness: opts.handleThickness || .01,
-                bezierThickness: opts.bezierThickness || .015
-            });
-
-            //var params = $$('.param', bezierCode),
-            //	prettyOffsets = bezier.coordinates.toString().split(',');
-            //for (var i = params.length; i--;) {
-            //	params[i].textContent = prettyOffsets[i];
-            //}
+            P1.update();
         },
 
         deleteItem(a) {

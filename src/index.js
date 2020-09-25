@@ -1,6 +1,7 @@
 import bezierLibrary from './bezier-library';
 import {
-    $
+    $,
+    prefix
 } from './enviroment';
 import {
     CubicBezier,
@@ -14,11 +15,13 @@ import classes from './style.css';
 /**
  * Returns cubicBezier
  * @param {Object} opts appendTo, width, default, bezierThickness, handleThickness, hanleColor, 
- * bezierColor, arrowKeyControls, onClick, predefined, padding, bezierLibrary, input, preview, 
+ * bezierColor, arrowKeyControls, onClick, predefined, padding, bezierLibrary, input, preview, duration
  */
 export const cubicBezier = (options = {}) => {
     const opts = {
         ...{
+            preview: true,
+            input: true,
             width: 150,
             arrowKeyControls: true,
             onClick: true
@@ -26,13 +29,15 @@ export const cubicBezier = (options = {}) => {
         ...options
     };
     const self = {
-        template: `<section class="curve-library" style="margin-left:${opts.width+30}px;"></section>
+        template: `<section class="curve-library" style="height:${opts.width*2}px;margin-left:${opts.width+30}px;"></section>
+                    ${opts.preview ? '<div class="curve-preview-ball"></div>' : ''}
                     <div class="coordinate-plane">
                         <span class="control-point P0" data-point="P0"></span>
                         <button class="control-point curve-button P1" style="left:50px; top: 250px;" data-point="P1"></button>
                         <button class="control-point curve-button P2" style="left:250px; top: 250px;" data-point="P2"></button>
                         <span class="curve-control-point P3" data-point="P3"></span>
                         <canvas height="${opts.width*2}" width="${opts.width}" class="curve-canvas"></canvas>
+                        ${opts.input ? '<input type="text" id="curve-input">' : ''}
                         <button class="curve-save">Save</button>
                     </div>`,
         onMouseDown() {
@@ -52,8 +57,6 @@ export const cubicBezier = (options = {}) => {
                 x = Math.min(Math.max(left, x), left + self.curveBoundingBox.width);
                 // Constrain y
                 y = Math.min(Math.max(top, y), top + (self.curveBoundingBox.width * 2));
-                //y = y > top + (curveBoundingBox.width * 2) ? top + (curveBoundingBox.width * 2) : y;
-                //y = y < top ? y = top : y;
 
                 me.style.left = x - left + 'px';
                 me.style.top = y - top + 'px';
@@ -136,9 +139,24 @@ export const cubicBezier = (options = {}) => {
             this.lib.curves[rawValues] = rawValues;
             this.lib.save();
         },
-        update() {
+        onChange() {
+            if (!self.checkCoordinates(this.value.split(','))) return;
+            self.update(this.value);
+            self.P1.style.left = self.bezierCanvas.offsets[0]['left'];
+            self.P1.style.top = self.bezierCanvas.offsets[0]['top'];
+            self.P2.style.left = self.bezierCanvas.offsets[1]['left'];
+            self.P2.style.top = self.bezierCanvas.offsets[1]['top'];
+        },
+        runPreview() {
+            //this.updateDelayed();
+            if (this.ball.style.transform !== 'translateX(0px)')
+                this.ball.style.transform = 'translateX(0px)';
+            else
+                this.ball.style.transform = `translateX(${opts.width - 10}px)`;
+        },
+        update(value = '') {
             // Redraw canvas
-            this.bezierCanvas.bezier = new CubicBezier(
+            this.bezierCanvas.bezier = new CubicBezier(value ||
                 this.bezierCanvas.offsetsToCoordinates(this.P1)
                 .concat(this.bezierCanvas.offsetsToCoordinates(this.P2))
             );
@@ -150,13 +168,14 @@ export const cubicBezier = (options = {}) => {
                 bezierThickness: opts.bezierThickness || .015
             });
 
-            //updateCopyInputs();
-            //var params = $$('.param', bezierCode),
-            //	prettyOffsets = bezier.coordinates.toString().split(',');
-            //
-            //for (var i = params.length; i--;) {
-            //	params[i].textContent = prettyOffsets[i];
-            //}
+            this.input && (this.input.value = this.getValueString(this.bezierCanvas.bezier));
+            this.ball.style.setProperty(prefix + 'transition-timing-function', this.getValueCss(this.bezierCanvas.bezier), null);
+            //this.updateDelayed();
+        },
+        updateDelayed() {
+            if (history.pushState) {
+                history.pushState(null, null, this.bezierCanvas.bezier.coordinates);
+            }
         },
         getValueArrayNum(bezier) {
             return bezier.coordinates.toString().split(',').map(n => parseFloat(n));
@@ -170,26 +189,49 @@ export const cubicBezier = (options = {}) => {
         getValueCss(bezier) {
             return "cubic-bezier(" + bezier.coordinates.toString() + ")";
         },
+        getDuration() {
+            return (isNaN(this.duration = Math.round(this.duration * 10) / 10)) ? null : this.duration;
+        },
+        checkCoordinates(coordinates) {
+            if (coordinates.length !== 4) return false;
+            let valid = true;
+            coordinates.forEach((c, i) => {
+                if (isNaN(c) || (!(i % 2) && (c < 0 || c > 1))) {
+                    console.log('Wrong coordinate at [' + i + '] (' + c + ')')
+                    valid = false;
+                } else if (isNaN(c) || ((i % 2) && (c < -.5 || c > 1.5))) {
+                    console.log('Wrong coordinate at [' + i + '] (' + c + ')')
+                    valid = false;
+                }
+            });
+            return valid;
+        },
         init() {
             const curveDisplay = document.createElement('div');
             curveDisplay.classList.add('curve-display');
             curveDisplay.innerHTML = this.template;
-            (opts.appendTo && opts.appendTo.appendChild(curveDisplay)) ||
-            document.body.appendChild(curveDisplay);
+            curveDisplay.style.width = opts.width + 90 + 'px';
+            if (opts.appendTo && typeof opts.appendChild === 'string')
+                $(opts.appendTo).appendChild(curveDisplay)
+            else
+                (opts.appendTo && opts.appendTo.appendChild(curveDisplay)) ||
+                document.body.appendChild(curveDisplay);
 
-            this.values = $('.values', curveDisplay);
+            this.input = $('#curve-input', curveDisplay);
             this.curve = $('.curve-canvas', curveDisplay);
             this.P1 = $('.P1', curveDisplay);
             this.P2 = $('.P2', curveDisplay);
             this.library = $('.curve-library', curveDisplay);
             this.save = $('.curve-save', curveDisplay);
+            this.duration = opts.duration || 1.5;
+            this.ball = $('.curve-preview-ball', curveDisplay);
+            this.ball.style.setProperty(prefix + 'transition-duration', this.getDuration() + 's', null);
             this.bezierCanvas = new BezierCanvas(this.curve, null, opts.padding || [.25, 0]);
+            this.P1.update = () => this.update();
             this.lib = bezierLibrary(this.library, this.bezierCanvas, this.P1, this.P2, opts.bezierLibrary);
 
             this.ctx = this.curve.getContext("2d");
-            //bezierCode = $('h1 code'),
             this.curveBoundingBox = this.curve.getBoundingClientRect();
-            //pixelDepth = window.devicePixelRatio || 1;
 
             // Add predefined curves
             opts.clearStorage && localStorage.curves && localStorage.removeItem('curves');
@@ -199,6 +241,7 @@ export const cubicBezier = (options = {}) => {
 
             this.lib.render();
 
+            opts.default && this.checkCoordinates(opts.default.split(',')) || (opts.default = false);
             this.bezierCanvas.bezier = new CubicBezier(opts.default || ".25, .1, .25, 1"); //TODO Change to input
             this.P1.style.left = this.bezierCanvas.offsets[0]['left'];
             this.P1.style.top = this.bezierCanvas.offsets[0]['top'];
@@ -211,6 +254,8 @@ export const cubicBezier = (options = {}) => {
             this.P1.onkeydown = this.P2.onkeydown = opts.arrowKeyControls ? this.onKeyDown : null;
             this.curve.onclick = opts.onClick ? this.onClick : null;
             this.curve.onmousemove = this.onMouseMove;
+            this.input && (this.input.onchange = this.onChange);
+            this.ball.onclick = () => this.runPreview();
             this.save.onclick = e => this.onSave(e);
         }
     }
