@@ -7,6 +7,7 @@
     "start": "parcel index.html",
     "dev": "parcel watch index.html",
     "build": "parcel build src/index.js --out-file cubic-bezier-editor.min.js --target node",
+    "bump": "npm version patch -m 'Bump v%s'",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
