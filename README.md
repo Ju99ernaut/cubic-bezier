@@ -2,7 +2,7 @@
 
 >Cubic bezier curve editor based on [cubic-bezier.com](https://cubic-bezier.com/) modified to be easily customizable for embeding into other webapps.
 
-[DEMO](https://codepen.io/ju99ernaut)
+[DEMO](https://codepen.io/ju99ernaut/pen/JjXzLoq)
 
 ## Quickstart
 
@@ -33,7 +33,7 @@ bezierEditor.init();
 
 body {
 	background: rgb(46, 42, 42);
-	font-family: 'Hiragino Kaku Gothic Pro', 'Segoe UI', 'Apple Gothic', Tahoma, 'Helvetica Neue', sans-serif;
+	font-family: 'Helvetica Neue', sans-serif;
 	line-height: 1.4;
 }
 ```
@@ -42,20 +42,21 @@ body {
 
 | Option | Description | Type | Default |
 |-|-|-|-
-| `appendTo` | Element or selector to append the editor | [HTMLElement](https://developer.mozilla.org) or [string](https://developer.mozilla.org) | `<body></body>` |
-| `width` | width of the canvas, `height = width * 2`  | [number](https://developer.mozilla.org) | `150` |
-| `default` | editor default values | [string](https://developer.mozilla.org) | `.25, .1, .25, 1` |
-| `bezierThickness` | bezier curve thickness | [number](https://developer.mozilla.org) | `.015` |
-| `handleThickness` | handle thickness | [number](https://developer.mozilla.org) | `.01` |
-| `bezierColor` | bezier curve color | [string](https://developer.mozilla.org) | `#aaa4aa` |
-| `handleColor` | handle color | [string](https://developer.mozilla.org) | `rgba(0,255,0,.6)` |
-| `arrowKeys` | allow moving handle with arrow keys | [boolean](https://developer.mozilla.org) | `true` |
-| `onClick` | when canvas is clicked move the closest handle to mouse position | [boolean](https://developer.mozilla.org) | `true` |
-| `predefined` | predefined curves | [object](https://developer.mozilla.org) | `{'ease': '.25,.1,.25,1','linear': '0,0,1,1','ease-in': '.42,0,1,1','ease-out': '0,0,.58,1','ease-in-out': '.42,0,.58,1'}` |
-| `padding` | canvas padding | [array](https://developer.mozilla.org) or [number](https://developer.mozilla.org) | `[.25, 0]` |
-| `bezierLibrary` | bezier library options `width and height apply to each library item` | [object](https://developer.mozilla.org) | `{width:30,height:30,handleColor:'rgba(0,255,0,.6)',bezierColor:'#aaa4aa',handleThickness:.01,bezierThickness:.015}` |
-| `input` | show input | [boolean](https://developer.mozilla.org) | `true` |
-| `preview` | show preview animation | [boolean](https://developer.mozilla.org) | `true` |
+| `appendTo` | Element or selector to append the editor | `HTMLElement` or `string` | `<body></body>` |
+| `width` | width of the canvas, `height = width * 2`  | `number` | `150` |
+| `default` | editor default values | `string` | `.25, .1, .25, 1` |
+| `bezierThickness` | bezier curve thickness | `number` | `.015` |
+| `handleThickness` | handle thickness | `number` | `.01` |
+| `bezierColor` | bezier curve color | `string` | `#aaa4aa` |
+| `handleColor` | handle color | `string` | `rgba(0,255,0,.6)` |
+| `arrowKeys` | allow moving handle with arrow keys | `boolean` | `true` |
+| `onClick` | when canvas is clicked move the closest handle to mouse position | `boolean` | `true` |
+| `predefined` | predefined curves | `object` | `{'ease': '.25,.1,.25,1','linear': '0,0,1,1','ease-in': '.42,0,1,1','ease-out': '0,0,.58,1','ease-in-out': '.42,0,.58,1'}` |
+| `padding` | canvas padding | `array` or `number` | `[.25, 0]` |
+| `bezierLibrary` | bezier library options `width and height apply to each library item` | `object` | `{width:30,height:30,handleColor:'rgba(0,255,0,.6)',bezierColor:'#aaa4aa',handleThickness:.01,bezierThickness:.015}` |
+| `input` | show input | `boolean` | `true` |
+| `preview` | show preview animation | `boolean` | `true` |
+| `duration` | preview animation duration | `number` | `1.5` |
 
 ## Reference
 ```js
@@ -63,6 +64,8 @@ cubicBezier.getValueArrayNum(bezier);//[0.25, 0.1, 0.25, 1]
 cubicBezier.getValueArray(bezier);//[".25", " .1", " .25", " 1"]
 cubicBezier.getValueString(bezier);//'.42,0,.58,1'
 cubicBezier.getCss(bezier);//'cubic-bezier(.42,0,.58,1)'
+cubicBezier.getDuration(bezier);//1.5
+cubicBezier.checkCoordinates([".25", " .1", " .25", " 1"]);//true
 ```
 
 ## Download
@@ -81,15 +84,23 @@ Browser
 <link href="https://unpkg.com/cubic-bezier-editor/dist/css/cubic-bezier-editor.min.css" rel="stylesheet">
 <script src="https://unpkg.com/cubic-bezier-editor"></script>
 
-...
+<script>
+    const bezierEditor = cubicBezier({
+        /* Your options */
+    });
+    bezierEditor.init();
+</script>
 ```
 
-Node
+Modern Javascript
 ```js
 import cubicBezier from 'cubic-bezier-editor';
 import 'cubic-bezier-editor/dist/css/cubic-bezier-editor.min.css';
 
-//...
+const bezierEditor = cubicBezier({
+    /* Your options */
+});
+bezierEditor.init();
 ```
 
 ## Development
