@@ -43,6 +43,7 @@ body {
 | Option | Description | Type | Default |
 |-|-|-|-
 | `appendTo` | Element or selector to append the editor | `HTMLElement` or `string` | `<body></body>` |
+| `onUpdate` | Callback to run when canvas is updated | `Function` | `() => {}` |
 | `width` | width of the canvas, `height = width * 2`  | `number` | `150` |
 | `default` | editor default values | `string` | `.25, .1, .25, 1` |
 | `bezierThickness` | bezier curve thickness | `number` | `.015` |
