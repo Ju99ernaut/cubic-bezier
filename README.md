@@ -12,7 +12,7 @@
 	<meta charset="utf-8" />
     <title>cubic-bezier</title>
     <link href="https://unpkg.com/cubic-bezier-editor/dist/cubic-bezier-editor.min.css" rel="stylesheet">
-    <script src="https://unpkg.com/cubic-bezier-editor"></script>
+    <script src="https://unpkg.com/cubic-bezier-editor/dist/cubic-bezier-editor.min.js"></script>
 </head>
 <body></body>
 ```
@@ -60,11 +60,11 @@ body {
 
 ## Reference
 ```js
-cubicBezier.getValueArrayNum(bezier);//[0.25, 0.1, 0.25, 1]
-cubicBezier.getValueArray(bezier);//[".25", " .1", " .25", " 1"]
-cubicBezier.getValueString(bezier);//'.42,0,.58,1'
-cubicBezier.getCss(bezier);//'cubic-bezier(.42,0,.58,1)'
-cubicBezier.getDuration(bezier);//1.5
+cubicBezier.getValueArrayNum();//[0.25, 0.1, 0.25, 1]
+cubicBezier.getValueArray();//[".25", " .1", " .25", " 1"]
+cubicBezier.getValueString();//'.42,0,.58,1'
+cubicBezier.getCss();//'cubic-bezier(.42,0,.58,1)'
+cubicBezier.getDuration();//1.5
 cubicBezier.checkCoordinates([".25", " .1", " .25", " 1"]);//true
 ```
 
@@ -82,7 +82,7 @@ cubicBezier.checkCoordinates([".25", " .1", " .25", " 1"]);//true
 Browser
 ```js
 <link href="https://unpkg.com/cubic-bezier-editor/dist/cubic-bezier-editor.min.css" rel="stylesheet">
-<script src="https://unpkg.com/cubic-bezier-editor"></script>
+<script src="https://unpkg.com/cubic-bezier-editor/dist/cubic-bezier-editor.min.js"></script>
 
 <script>
     const bezierEditor = cubicBezier({
