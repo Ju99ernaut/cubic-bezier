@@ -24,7 +24,8 @@ export const cubicBezier = (options = {}) => {
             input: true,
             width: 150,
             arrowKeyControls: true,
-            onClick: true
+            onClick: true,
+            onUpdate() {}
         },
         ...options
     };
@@ -168,8 +169,9 @@ export const cubicBezier = (options = {}) => {
                 bezierThickness: opts.bezierThickness || .015
             });
 
-            this.input && (this.input.value = this.getValueString(this.bezierCanvas.bezier));
-            this.ball.style.setProperty(prefix + 'transition-timing-function', this.getValueCss(this.bezierCanvas.bezier), null);
+            this.input && (this.input.value = this.getValueString());
+            this.ball && this.ball.style.setProperty(prefix + 'transition-timing-function', this.getValueCss(), null);
+            opts.onUpdate(this);
             //this.updateDelayed();
         },
         updateDelayed() {
@@ -177,17 +179,17 @@ export const cubicBezier = (options = {}) => {
                 history.pushState(null, null, this.bezierCanvas.bezier.coordinates);
             }
         },
-        getValueArrayNum(bezier) {
-            return bezier.coordinates.toString().split(',').map(n => parseFloat(n));
+        getValueArrayNum() {
+            return this.bezierCanvas.bezier.coordinates.toString().split(',').map(n => parseFloat(n));
         },
-        getValueArray(bezier) {
-            return bezier.coordinates.toString().split(',');
+        getValueArray() {
+            return this.bezierCanvas.bezier.coordinates.toString().split(',');
         },
-        getValueString(bezier) {
-            return bezier.coordinates.toString();
+        getValueString() {
+            return this.bezierCanvas.bezier.coordinates.toString();
         },
-        getValueCss(bezier) {
-            return "cubic-bezier(" + bezier.coordinates.toString() + ")";
+        getValueCss() {
+            return "cubic-bezier(" + this.bezierCanvas.bezier.coordinates.toString() + ")";
         },
         getDuration() {
             return (isNaN(this.duration = Math.round(this.duration * 10) / 10)) ? null : this.duration;
@@ -225,7 +227,7 @@ export const cubicBezier = (options = {}) => {
             this.save = $('.curve-save', curveDisplay);
             this.duration = opts.duration || 1.5;
             this.ball = $('.curve-preview-ball', curveDisplay);
-            this.ball.style.setProperty(prefix + 'transition-duration', this.getDuration() + 's', null);
+            this.ball && this.ball.style.setProperty(prefix + 'transition-duration', this.getDuration() + 's', null);
             this.bezierCanvas = new BezierCanvas(this.curve, null, opts.padding || [.25, 0]);
             this.P1.update = () => this.update();
             this.lib = bezierLibrary(this.library, this.bezierCanvas, this.P1, this.P2, opts.bezierLibrary);
@@ -255,7 +257,7 @@ export const cubicBezier = (options = {}) => {
             this.curve.onclick = opts.onClick ? this.onClick : null;
             this.curve.onmousemove = this.onMouseMove;
             this.input && (this.input.onchange = this.onChange);
-            this.ball.onclick = () => this.runPreview();
+            this.ball && (this.ball.onclick = () => this.runPreview());
             this.save.onclick = e => this.onSave(e);
         }
     }
