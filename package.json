@@ -1,6 +1,6 @@
 {
   "name": "cubic-bezier-editor",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Editor for generating cubic bezier value to use in css animations",
   "main": "index.js",
   "scripts": {
