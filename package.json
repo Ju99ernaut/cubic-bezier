@@ -2,7 +2,7 @@
   "name": "cubic-bezier-editor",
   "version": "1.0.4",
   "description": "Editor for generating cubic bezier value to use in css animations",
-  "main": "index.js",
+  "main": "dist/cubic-bezier-editor.min.js",
   "scripts": {
     "start": "parcel index.html",
     "dev": "parcel watch index.html",
