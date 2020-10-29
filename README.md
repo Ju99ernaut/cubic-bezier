@@ -9,7 +9,7 @@
 ### HTML
 ```html
 <head>
-	<meta charset="utf-8" />
+    <meta charset="utf-8" />
     <title>cubic-bezier</title>
     <link href="https://unpkg.com/cubic-bezier-editor/dist/cubic-bezier-editor.min.css" rel="stylesheet">
     <script src="https://unpkg.com/cubic-bezier-editor/dist/cubic-bezier-editor.min.js"></script>
