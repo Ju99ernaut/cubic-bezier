@@ -12,7 +12,7 @@
     <meta charset="utf-8" />
     <title>cubic-bezier</title>
     <link href="https://unpkg.com/cubic-bezier-editor/dist/cubic-bezier-editor.min.css" rel="stylesheet">
-    <script src="https://unpkg.com/cubic-bezier-editor/dist/cubic-bezier-editor.min.js"></script>
+    <script src="https://unpkg.com/cubic-bezier-editor"></script>
 </head>
 <body></body>
 ```
@@ -58,15 +58,28 @@ body {
 | `input` | show input | `boolean` | `true` |
 | `preview` | show preview animation | `boolean` | `true` |
 | `duration` | preview animation duration | `number` | `1.5` |
+| `transformPos` | custom callback function for modifying position onupdate | `Function` | `undefined` |
 
 ## Reference
 ```js
 cubicBezier.getValueArrayNum();//[0.25, 0.1, 0.25, 1]
 cubicBezier.getValueArray();//[".25", " .1", " .25", " 1"]
 cubicBezier.getValueString();//'.42,0,.58,1'
-cubicBezier.getCss();//'cubic-bezier(.42,0,.58,1)'
+cubicBezier.getValueCss();//'cubic-bezier(.42,0,.58,1)'
 cubicBezier.getDuration();//1.5
 cubicBezier.checkCoordinates([".25", " .1", " .25", " 1"]);//true
+```
+
+### transformPos Callback
+By default all position data is obtained by using `getBoundingClientRect`, the `transformPos` callback can be used if you want to tweek these positions;
+
+```js
+const bezierEditor = cubicBezier({
+    transformPos(l, t) {
+        // transform
+        return { left, top };
+    },
+});
 ```
 
 ## Download
@@ -83,7 +96,7 @@ cubicBezier.checkCoordinates([".25", " .1", " .25", " 1"]);//true
 Browser
 ```js
 <link href="https://unpkg.com/cubic-bezier-editor/dist/cubic-bezier-editor.min.css" rel="stylesheet">
-<script src="https://unpkg.com/cubic-bezier-editor/dist/cubic-bezier-editor.min.js"></script>
+<script src="https://unpkg.com/cubic-bezier-editor"></script>
 
 <script>
     const bezierEditor = cubicBezier({
