@@ -15,7 +15,8 @@ import classes from './style.css';
 /**
  * Returns cubicBezier
  * @param {Object} opts appendTo, width, default, bezierThickness, handleThickness, hanleColor, 
- * bezierColor, arrowKeyControls, onClick, predefined, padding, bezierLibrary, input, preview, duration
+ * bezierColor, arrowKeyControls, onClick, predefined, padding, bezierLibrary, input, preview, duration,
+ * transformPos
  */
 export const cubicBezier = (options = {}) => {
     const opts = {
@@ -45,19 +46,25 @@ export const cubicBezier = (options = {}) => {
             const me = this;
 
             document.onmousemove = function drag(e) {
+                const curveBoundingBox = self.curve.getBoundingClientRect();
                 let x = e.pageX,
-                    y = e.pageY;
-                const left = self.curveBoundingBox.left,
-                    top = self.curveBoundingBox.top;
+                    y = e.pageY,
+                    left = curveBoundingBox.left,
+                    top = curveBoundingBox.top;
 
-                if (x === 0 && y == 0) {
-                    return;
+                if (options.transformPos) {
+                    const transform = options.transformPos(left, top);
+                    left = transform.left;
+                    top = transform.top;
                 }
 
+                if (x === 0 && y == 0)
+                    return;
+
                 // Constrain x
-                x = Math.min(Math.max(left, x), left + self.curveBoundingBox.width);
+                x = Math.min(Math.max(left, x), left + curveBoundingBox.width);
                 // Constrain y
-                y = Math.min(Math.max(top, y), top + (self.curveBoundingBox.width * 2));
+                y = Math.min(Math.max(top, y), top + (curveBoundingBox.width * 2));
 
                 me.style.left = x - left + 'px';
                 me.style.top = y - top + 'px';
@@ -65,7 +72,7 @@ export const cubicBezier = (options = {}) => {
                 self.update();
             };
 
-            document.onmouseup = function () {
+            document.onmouseup = function() {
                 me.focus();
 
                 document.onmousemove = document.onmouseup = null;
@@ -78,24 +85,32 @@ export const cubicBezier = (options = {}) => {
                 evt.preventDefault();
 
                 // Arrow keys pressed
-                const left = parseInt(this.style.left),
+                const curveBoundingBox = self.curve.getBoundingClientRect(),
+                    left = parseInt(this.style.left),
                     top = parseInt(this.style.top),
-                    xMax = self.curveBoundingBox.left,
-                    yMax = self.curveBoundingBox.top,
                     offset = 3 * (evt.shiftKey ? 10 : 1);
+
+                let xMax = curveBoundingBox.left,
+                    yMax = curveBoundingBox.top;
+
+                if (options.transformPos) {
+                    const transform = options.transformPos(xMax, yMax);
+                    xMax = transform.left;
+                    yMax = transform.top;
+                }
 
                 switch (code) {
                     case 37:
-                        this.style.left = Math.min(Math.max(xMax, left - offset), xMax + self.curveBoundingBox.width) + 'px'
+                        this.style.left = Math.min(Math.max(xMax, left - offset), xMax + curveBoundingBox.width) + 'px'
                         break;
                     case 38:
-                        this.style.top = Math.min(Math.max(yMax, top - offset), yMax + (self.curveBoundingBox.width * 2)) + 'px';
+                        this.style.top = Math.min(Math.max(yMax, top - offset), yMax + (curveBoundingBox.width * 2)) + 'px';
                         break;
                     case 39:
-                        this.style.left = Math.min(Math.max(xMax, left + offset), xMax + self.curveBoundingBox.width) + 'px';
+                        this.style.left = Math.min(Math.max(xMax, left + offset), xMax + curveBoundingBox.width) + 'px';
                         break;
                     case 40:
-                        this.style.top = Math.min(Math.max(yMax, top + offset), yMax + (self.curveBoundingBox.width * 2)) + 'px';
+                        this.style.top = Math.min(Math.max(yMax, top + offset), yMax + (curveBoundingBox.width * 2)) + 'px';
                         break;
                 }
 
@@ -105,9 +120,17 @@ export const cubicBezier = (options = {}) => {
             }
         },
         onClick(evt) {
-            const left = self.curveBoundingBox.left,
-                top = self.curveBoundingBox.top,
-                x = evt.pageX - left,
+            const curveBoundingBox = self.curve.getBoundingClientRect();
+            let left = curveBoundingBox.left,
+                top = curveBoundingBox.top;
+
+            if (options.transformPos) {
+                const transform = options.transformPos(left, top);
+                left = transform.left;
+                top = transform.top;
+            }
+
+            const x = evt.pageX - left,
                 y = evt.pageY - top;
 
             // Find which point is closer
@@ -125,13 +148,21 @@ export const cubicBezier = (options = {}) => {
             }
         },
         onMouseMove(evt) {
-            const left = self.curveBoundingBox.left,
-                top = self.curveBoundingBox.top,
-                height = self.curveBoundingBox.height,
-                x = evt.pageX - left,
+            const curveBoundingBox = self.curve.getBoundingClientRect();
+            let left = curveBoundingBox.left,
+                top = curveBoundingBox.top;
+            const height = curveBoundingBox.height;
+
+            if (options.transformPos) {
+                const transform = options.transformPos(left, top);
+                left = transform.left;
+                top = transform.top;
+            }
+
+            const x = evt.pageX - left,
                 y = evt.pageY - top;
 
-            this.parentNode.setAttribute('data-time', Math.round(100 * x / self.curveBoundingBox.width));
+            this.parentNode.setAttribute('data-time', Math.round(100 * x / curveBoundingBox.width));
             this.parentNode.setAttribute('data-progression', Math.round(100 * (3 * height / 4 - y) / (height * .5)));
         },
         onSave() {
@@ -233,7 +264,6 @@ export const cubicBezier = (options = {}) => {
             this.lib = bezierLibrary(this.library, this.bezierCanvas, this.P1, this.P2, opts.bezierLibrary);
 
             this.ctx = this.curve.getContext("2d");
-            this.curveBoundingBox = this.curve.getBoundingClientRect();
 
             // Add predefined curves
             opts.clearStorage && localStorage.curves && localStorage.removeItem('curves');
