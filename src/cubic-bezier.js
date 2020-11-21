@@ -4,9 +4,7 @@
  *
  */
 
-import {
-    prefix
-} from './enviroment';
+import { prefix } from './enviroment';
 
 export class CubicBezier {
     /**

@@ -4,14 +4,8 @@
  *
  */
 
-import {
-    $,
-    $$
-} from './enviroment';
-import {
-    CubicBezier,
-    BezierCanvas
-} from './cubic-bezier';
+import { $, $$ } from './enviroment';
+import { CubicBezier, BezierCanvas } from './cubic-bezier';
 
 export default (library, bezierCanvas, P1, P2, opts = {}) => {
     const self = {
@@ -60,7 +54,7 @@ export default (library, bezierCanvas, P1, P2, opts = {}) => {
             button.innerHTML = '×';
             button.title = 'Remove from library';
             button.classList = 'curve-button';
-            button.addEventListener('click', function (e) {
+            button.addEventListener('click', function(e) {
                 e.stopPropagation();
                 //?Remove prompt
                 self.deleteItem(this.parentNode);

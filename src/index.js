@@ -1,15 +1,7 @@
 import bezierLibrary from './bezier-library';
-import {
-    $,
-    prefix
-} from './enviroment';
-import {
-    CubicBezier,
-    BezierCanvas
-} from './cubic-bezier';
-import {
-    predefined
-} from './consts';
+import { $, prefix } from './enviroment';
+import { CubicBezier, BezierCanvas } from './cubic-bezier';
+import { predefined } from './consts';
 import classes from './style.css';
 
 /**
@@ -275,7 +267,7 @@ export const cubicBezier = (options = {}) => {
             this.lib.render();
 
             opts.default && this.checkCoordinates(opts.default.split(',')) || (opts.default = false);
-            this.bezierCanvas.bezier = new CubicBezier(opts.default || ".25, .1, .25, 1"); //TODO Change to input
+            this.bezierCanvas.bezier = new CubicBezier(opts.default || ".25, .1, .25, 1");
             this.P1.style.left = this.bezierCanvas.offsets[0]['left'];
             this.P1.style.top = this.bezierCanvas.offsets[0]['top'];
             this.P2.style.left = this.bezierCanvas.offsets[1]['left'];
