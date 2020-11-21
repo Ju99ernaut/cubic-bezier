@@ -250,6 +250,7 @@ export const cubicBezier = (options = {}) => {
                 (opts.appendTo && opts.appendTo.appendChild(curveDisplay)) ||
                 document.body.appendChild(curveDisplay);
 
+            this.el = curveDisplay;
             this.input = $('#curve-input', curveDisplay);
             this.curve = $('.curve-canvas', curveDisplay);
             this.P1 = $('.P1', curveDisplay);
