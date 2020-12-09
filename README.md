@@ -4,6 +4,8 @@
 
 [DEMO](https://codepen.io/ju99ernaut/pen/JjXzLoq)
 
+Example implemenation in an [app](https://github.com/Ju99ernaut/gjs-easing-editor).
+
 ## Quickstart
 
 ### HTML
